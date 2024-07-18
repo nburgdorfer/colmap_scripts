@@ -342,6 +342,7 @@ def main():
     image_files = os.listdir(ARGS.image_path)
     image_files = [img for img in image_files if img[-3:] == "png" ]
     image_files.sort()
+    image_files = image_files[:num_cams]
 
     # create cameras file
     img = cv2.imread(os.path.join(ARGS.image_path,image_files[0]))
