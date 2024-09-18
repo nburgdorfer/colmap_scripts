@@ -67,3 +67,22 @@ We provide some example data from each supported dataset:
 
 - [DTU](https://stevens0-my.sharepoint.com/:u:/g/personal/nburgdor_stevens_edu/ERDdULsQ-j9BmOKIOMM5UCQBSlkfdACGkgvOue0J6yZ3Gw?e=xR9G1w)
 - [TNT](https://stevens0-my.sharepoint.com/:u:/g/personal/nburgdor_stevens_edu/EWCKcrdXz39Ir8zHE-EJ_2sB_nNs1B8ycLIQ6cD05uKfTg?e=yswd5j)
+
+The scripts receive as input two arguments:
+```bash
+./dtu_sparse_depth.sh <path-to-data> <scene>
+```
+
+After downloading either dataset, simply run:
+```bash
+./dtu_sparse_depth.sh <path-to-downloaded-data> scan001
+```
+or
+```bash
+./tnt_sparse_depth.sh <path-to-downloaded-data> Ignatius
+```
+and example of which being:
+
+```bash
+./dtu_sparse_depth.sh /mnt/Data/DTU/ scan001
+```
