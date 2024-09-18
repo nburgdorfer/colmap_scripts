@@ -75,11 +75,7 @@ The scripts receive as input two arguments:
 
 After downloading either dataset, simply run:
 ```bash
-./dtu_sparse_depth.sh <path-to-downloaded-data> scan001
-```
-or
-```bash
-./tnt_sparse_depth.sh <path-to-downloaded-data> Ignatius
+./<dataset>_sparse_depth.sh <path-to-downloaded-data> scan001
 ```
 and example of which being:
 
