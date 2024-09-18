@@ -6,8 +6,8 @@ from tqdm import tqdm
 from numpy import inf
 import argparse
 
-from cvt.geometry import render_point_cloud
-from cvt.io import read_cams_sfm, read_point_cloud, write_pfm
+from utils import render_point_cloud
+from utils import read_cams_sfm, read_point_cloud, write_pfm
 
 parser = argparse.ArgumentParser(description='Script for converting colmap points into sparse depth maps.')
 parser.add_argument('--points_file', type=str, help='Path to colmap points3d.txt file.', required=True)
@@ -19,6 +19,8 @@ parser.add_argument('--max_error', type=float, help='Maximum point error thresho
 parser.add_argument('--min_track_len', type=int, help='Minimum required point track length.', required=True)
 
 ARGS = parser.parse_args()
+
+
 
 
 def load_points(points_file, max_error, min_track_len):

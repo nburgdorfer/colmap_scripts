@@ -1,0 +1,5 @@
+numpy==1.26.3
+open3d==0.17.0
+opencv_python==4.10.0.84
+scipy==1.11.3
+tqdm==4.66.1
