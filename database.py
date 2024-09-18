@@ -3,7 +3,6 @@ import sqlite3
 import numpy as np
 from scipy.spatial.transform import Rotation as R
 import cv2
-from cvt.io import read_cams_sfm
 import argparse
 
 parser = argparse.ArgumentParser(description='Script for initializing colmap sparse model from a known trajectory.')
@@ -12,8 +11,6 @@ parser.add_argument('--image_path', type=str, help='Path to scene images.', requ
 parser.add_argument('--database_file', type=str, help='Path to desired colmap database.db file.', required=True)
 parser.add_argument('--output_path', type=str, help='Sparse depth output path.', required=True)
 ARGS = parser.parse_args()
-
-
 
 IS_PYTHON3 = sys.version_info[0] >= 3
 
@@ -101,6 +98,83 @@ CREATE_ALL = "; ".join(
     ]
 )
 
+def read_cams_sfm(camera_path: str, extension: str = "cam.txt") -> np.ndarray:
+    """Reads an entire directory of camera files in SFM format.
+
+    Parameters:
+        camera_path: Path to the directory of camera files.
+        extension: File extension being used for the camera files.
+
+    Returns:
+        Array of camera extrinsics, intrinsics, and view metadata (Nx2x4x4).
+    """
+    cam_files = os.listdir(camera_path)
+    cam_files.sort()
+
+    cams = []
+
+    for cf in cam_files:
+        if (cf[-7:] != extension):
+            continue
+
+        cam_path = os.path.join(camera_path,cf)
+        #with open(cam_path,'r') as f:
+        cam = read_single_cam_sfm(cam_path, 256)
+        cams.append(cam)
+
+    return np.asarray(cams)
+
+def read_single_cam_sfm(cam_file: str, depth_planes: int = 256) -> np.ndarray:
+    """Reads a single camera file in SFM format.
+
+    Parameters:
+        cam_file: Input camera file to be read.
+        depth_planes: Number of depth planes to store in the view metadata.
+
+    Returns:
+        Camera extrinsics, intrinsics, and view metadata (2x4x4).
+    """
+    cam = np.zeros((2, 4, 4))
+
+    with open(cam_file, 'r') as cam_file:
+        words = cam_file.read().split()
+
+    words_len = len(words)
+
+    # read extrinsic
+    for i in range(0, 4):
+        for j in range(0, 4):
+            extrinsic_index = 4 * i + j + 1
+            cam[0,i,j] = float(words[extrinsic_index])
+
+    # read intrinsic
+    for i in range(0, 3):
+        for j in range(0, 3):
+            intrinsic_index = 3 * i + j + 18
+            cam[1,i,j] = float(words[intrinsic_index])
+
+    if words_len == 29:
+        cam[1,3,0] = float(words[27])
+        cam[1,3,1] = float(words[28])
+        cam[1,3,2] = depth_planes
+        cam[1,3,3] = cam[1][3][0] + (cam[1][3][1] * cam[1][3][2])
+    elif words_len == 30:
+        cam[1,3,0] = float(words[27])
+        cam[1,3,1] = float(words[28])
+        cam[1,3,2] = float(words[29])
+        cam[1,3,3] = cam[1][3][0] + (cam[1][3][1] * cam[1][3][2])
+    elif words_len == 31:
+        cam[1,3,0] = words[27]
+        cam[1,3,1] = float(words[28])
+        cam[1,3,2] = float(words[29])
+        cam[1,3,3] = float(words[30])
+    else:
+        cam[1,3,0] = 0
+        cam[1,3,1] = 0
+        cam[1,3,2] = 0
+        cam[1,3,3] = 1
+
+    return cam
 
 def image_ids_to_pair_id(image_id1, image_id2):
     if image_id1 > image_id2:
