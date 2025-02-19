@@ -32,17 +32,17 @@ colmap feature_extractor \
 colmap exhaustive_matcher \
     --database_path ${DATA_PATH}/colmap/${SCENE}/database.db
 
-#colmap point_triangulator \
-#    --database_path ${DATA_PATH}/colmap/${SCENE}/database.db \
-#    --image_path ${DATA_PATH}/Images/${SCENE} \
-#    --input_path ${DATA_PATH}/colmap/${SCENE}/sparse/0/text \
-#    --output_path ${DATA_PATH}/colmap/${SCENE}/sparse/0
+colmap point_triangulator \
+    --database_path ${DATA_PATH}/colmap/${SCENE}/database.db \
+    --image_path ${DATA_PATH}/Images/${SCENE} \
+    --input_path ${DATA_PATH}/colmap/${SCENE}/sparse/0/text \
+    --output_path ${DATA_PATH}/colmap/${SCENE}/sparse/0
 
 colmap mapper \
     --database_path ${DATA_PATH}/colmap/${SCENE}/database.db \
     --image_path ${DATA_PATH}/Images/${SCENE} \
-    --input_path "${DATA_PATH}/colmap/${SCENE}/sparse" \
-    --output_path ${DATA_PATH}/colmap/${SCENE}/sparse
+    --input_path "${DATA_PATH}/colmap/${SCENE}/sparse/0/text" \
+    --output_path ${DATA_PATH}/colmap/${SCENE}/sparse/0
 
 colmap point_filtering \
     --input_path "${DATA_PATH}/colmap/${SCENE}/sparse/0" \
