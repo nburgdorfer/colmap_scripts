@@ -4,12 +4,12 @@ DATA_PATH=$1
 SCENE=$2
 
 # point threshold parameters
-MAX_ERROR=0.8
-MIN_TRACK_LEN=5
+MAX_ERROR=0.5
+MIN_TRACK_LEN=10
 
 # create sparse model output paths
-if [ ! -d "$DATA_PATH/${SCENE}/colmap/sparse/text" ]; then
-  mkdir -p "$DATA_PATH/${SCENE}/colmap/sparse/text"
+if [ ! -d "$DATA_PATH/${SCENE}/colmap/sparse/0/text" ]; then
+  mkdir -p "$DATA_PATH/${SCENE}/colmap/sparse/0/text"
 fi
 
 # create database.db file
@@ -23,7 +23,7 @@ python database.py \
     --cam_path ${DATA_PATH}/${SCENE}/Cameras \
     --image_path ${DATA_PATH}/${SCENE}/Images \
     --database_file ${DATA_PATH}/${SCENE}/colmap/database.db \
-    --output_path ${DATA_PATH}/${SCENE}/colmap/sparse/text
+    --output_path "${DATA_PATH}/${SCENE}/colmap/sparse/0/text"
 
 colmap feature_extractor \
     --database_path ${DATA_PATH}/${SCENE}/colmap/database.db \
@@ -35,12 +35,23 @@ colmap exhaustive_matcher \
 colmap point_triangulator \
     --database_path ${DATA_PATH}/${SCENE}/colmap/database.db \
     --image_path ${DATA_PATH}/${SCENE}/Images \
-    --input_path ${DATA_PATH}/${SCENE}/colmap/sparse/text \
-    --output_path ${DATA_PATH}/${SCENE}/colmap/sparse
+    --input_path ${DATA_PATH}/${SCENE}/colmap/sparse/0/text \
+    --output_path ${DATA_PATH}/${SCENE}/colmap/sparse/0
+
+#colmap mapper \
+#    --database_path ${DATA_PATH}/${SCENE}/colmap/database.db \
+#    --image_path ${DATA_PATH}/${SCENE}/Images \
+#    --output_path ${DATA_PATH}/${SCENE}/colmap/sparse
+
+colmap point_filtering \
+    --input_path "${DATA_PATH}/${SCENE}/colmap/sparse/0" \
+    --output_path "${DATA_PATH}/${SCENE}/colmap/sparse/0" \
+ 	--min_track_len ${MIN_TRACK_LEN} \
+  	--max_reproj_error ${MAX_ERROR}
 
 colmap model_converter \
-    --input_path ${DATA_PATH}/${SCENE}/colmap/sparse \
-    --output_path ${DATA_PATH}/${SCENE}/colmap/sparse/text \
+    --input_path "${DATA_PATH}/${SCENE}/colmap/sparse/0" \
+    --output_path "${DATA_PATH}/${SCENE}/colmap/sparse/0/text" \
     --output_type TXT 
  
 # create sparse depth maps from sparse model
@@ -48,16 +59,16 @@ if [ ! -d "${DATA_PATH}/${SCENE}/Sparse_Depths" ]; then
   mkdir -p "${DATA_PATH}/${SCENE}/Sparse_Depths"
 fi
 python colmap2sparse.py \
-    --points_file ${DATA_PATH}/${SCENE}/colmap/sparse/text/points3D.txt \
+    --points_file "${DATA_PATH}/${SCENE}/colmap/sparse/0/text/points3D.txt" \
     --cam_path ${DATA_PATH}/${SCENE}/Cameras \
     --image_path ${DATA_PATH}/${SCENE}/Images \
-    --images_file ${DATA_PATH}/${SCENE}/colmap/sparse/text/images.txt \
+    --images_file "${DATA_PATH}/${SCENE}/colmap/sparse/0/text/images.txt" \
     --output_path ${DATA_PATH}/${SCENE}/Sparse_Depths \
     --max_error ${MAX_ERROR} \
     --min_track_len ${MIN_TRACK_LEN}
 
 python colmap2ply.py \
-    --points_file ${DATA_PATH}/${SCENE}/colmap/sparse/text/points3D.txt \
+    --points_file "${DATA_PATH}/${SCENE}/colmap/sparse/0/text/points3D.txt" \
     --output_file ${DATA_PATH}/${SCENE}/${SCENE}_sparse.ply \
     --max_error ${MAX_ERROR} \
     --min_track_len ${MIN_TRACK_LEN}
