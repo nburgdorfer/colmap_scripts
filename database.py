@@ -336,11 +336,17 @@ def main():
 
     # read in data
     cams = read_cams_sfm(ARGS.cam_path)
-    num_cams = cams.shape[0]
+
     image_files = os.listdir(ARGS.image_path)
     image_files = [img for img in image_files if img[-3:] == "png" ]
     image_files.sort()
-    image_files = image_files[:num_cams]
+
+    # select number of views based on images and cams
+    num_cams = cams.shape[0]
+    num_images = len(image_files)
+    num_views = min(num_cams, num_images)
+    image_files = image_files[:num_views]
+    cams = cams[:num_views]
 
     # create cameras file
     img = cv2.imread(os.path.join(ARGS.image_path,image_files[0]))

@@ -48,18 +48,18 @@ colmap model_converter \
     --output_path "${DATA_PATH}/${SCENE}/colmap/sparse/0/text" \
     --output_type TXT 
  
-# create sparse depth maps from sparse model
-if [ ! -d "${DATA_PATH}/${SCENE}/Sparse_Depths" ]; then
-  mkdir -p "${DATA_PATH}/${SCENE}/Sparse_Depths"
-fi
-python colmap2sparse.py \
-    --points_file "${DATA_PATH}/${SCENE}/colmap/sparse/0/text/points3D.txt" \
-    --cam_path ${DATA_PATH}/${SCENE}/Cameras \
-    --image_path ${DATA_PATH}/${SCENE}/Images \
-    --images_file "${DATA_PATH}/${SCENE}/colmap/sparse/0/text/images.txt" \
-    --output_path ${DATA_PATH}/${SCENE}/Sparse_Depths \
-    --max_error ${MAX_ERROR} \
-    --min_track_len ${MIN_TRACK_LEN}
+## create sparse depth maps from sparse model
+#if [ ! -d "${DATA_PATH}/${SCENE}/Sparse_Depths" ]; then
+#  mkdir -p "${DATA_PATH}/${SCENE}/Sparse_Depths"
+#fi
+#python colmap2sparse.py \
+#    --points_file "${DATA_PATH}/${SCENE}/colmap/sparse/0/text/points3D.txt" \
+#    --cam_path ${DATA_PATH}/${SCENE}/Cameras \
+#    --image_path ${DATA_PATH}/${SCENE}/Images \
+#    --images_file "${DATA_PATH}/${SCENE}/colmap/sparse/0/text/images.txt" \
+#    --output_path ${DATA_PATH}/${SCENE}/Sparse_Depths \
+#    --max_error ${MAX_ERROR} \
+#    --min_track_len ${MIN_TRACK_LEN}
 
 python colmap2ply.py \
     --points_file "${DATA_PATH}/${SCENE}/colmap/sparse/0/text/points3D.txt" \

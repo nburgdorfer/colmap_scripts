@@ -1,9 +1,9 @@
 #!/bin/bash
 
-./tnt_sparse_depth.sh ~/data/TNT Barn
-./tnt_sparse_depth.sh ~/data/TNT Caterpillar
-./tnt_sparse_depth.sh ~/data/TNT Church
-./tnt_sparse_depth.sh ~/data/TNT Courthouse
-./tnt_sparse_depth.sh ~/data/TNT Ignatius
-./tnt_sparse_depth.sh ~/data/TNT Meetingroom
-./tnt_sparse_depth.sh ~/data/TNT Truck
+./tnt_sparse_depth.sh /mnt/Drive2/TNT/training Barn
+#./tnt_sparse_depth.sh /mnt/Drive2/TNT/training Caterpillar
+./tnt_sparse_depth.sh /mnt/Drive2/TNT/training Church
+./tnt_sparse_depth.sh /mnt/Drive2/TNT/training Courthouse
+#./tnt_sparse_depth.sh /mnt/Drive2/TNT/training Ignatius
+./tnt_sparse_depth.sh /mnt/Drive2/TNT/training Meetingroom
+#./tnt_sparse_depth.sh /mnt/Drive2/TNT/training Truck
