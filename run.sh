@@ -19,10 +19,10 @@ if [ -f "$DATA_PATH/${SCENE}/colmap/database.db" ]; then
 fi
 touch "$DATA_PATH/${SCENE}/colmap/database.db"
 
-# python images_from_video.py \
-#     --video_path "${VIDEO}" \
-#     --output_path "${DATA_PATH}/${SCENE}" \
-#     --frame_freq 20
+python images_from_video.py \
+    --video_path "${VIDEO}" \
+    --output_path "${DATA_PATH}/${SCENE}" \
+    --frame_freq 20
 
 colmap feature_extractor \
     --database_path ${DATA_PATH}/${SCENE}/colmap/database.db \
@@ -32,11 +32,11 @@ colmap feature_extractor \
 colmap exhaustive_matcher \
     --database_path ${DATA_PATH}/${SCENE}/colmap/database.db
 
-# colmap point_triangulator \
-#     --database_path ${DATA_PATH}/${SCENE}/colmap/database.db \
-#     --image_path ${DATA_PATH}/${SCENE}/Images \
-#     --input_path ${DATA_PATH}/${SCENE}/colmap/sparse/0/text \
-#     --output_path ${DATA_PATH}/${SCENE}/colmap/sparse/0
+colmap point_triangulator \
+    --database_path ${DATA_PATH}/${SCENE}/colmap/database.db \
+    --image_path ${DATA_PATH}/${SCENE}/Images \
+    --input_path ${DATA_PATH}/${SCENE}/colmap/sparse/0/text \
+    --output_path ${DATA_PATH}/${SCENE}/colmap/sparse/0
 
 colmap mapper \
    --database_path ${DATA_PATH}/${SCENE}/colmap/database.db \
