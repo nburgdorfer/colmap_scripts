@@ -5,8 +5,8 @@ SCENE=$2
 VIDEO=$3
 
 # point threshold parameters
-MAX_ERROR=0.5
-MIN_TRACK_LEN=10
+MAX_ERROR=$4
+MIN_TRACK_LEN=$5
 
 # create sparse model output paths
 if [ ! -d "$DATA_PATH/${SCENE}/colmap/sparse/0/text" ]; then
@@ -19,10 +19,10 @@ if [ -f "$DATA_PATH/${SCENE}/colmap/database.db" ]; then
 fi
 touch "$DATA_PATH/${SCENE}/colmap/database.db"
 
-python images_from_video.py \
-    --video_path "${VIDEO}" \
-    --output_path "${DATA_PATH}/${SCENE}" \
-    --frame_freq 20
+# python images_from_video.py \
+#     --video_path "${VIDEO}" \
+#     --output_path "${DATA_PATH}/${SCENE}" \
+#     --frame_freq 20
 
 colmap feature_extractor \
     --database_path ${DATA_PATH}/${SCENE}/colmap/database.db \

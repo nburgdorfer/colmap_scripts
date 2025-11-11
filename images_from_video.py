@@ -17,6 +17,7 @@ def main():
     frame_count = 0
     success = True
 
+    print("Writing video frames to file...")
     while success:
         success, image = vidcap.read()
         if success:
